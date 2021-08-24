@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/vue@next"></script> <!--TODO: switch to prod-->
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+        <script src="login.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="app">
+            <table>
+                <tr>
+                    <td>Username:</td>
+                    <td><input v-model="username"></td>
+                </tr>
+                <!--
+                <tr>
+                    <td>Email:</td>
+                    <td><input v-model="email"></td>
+                </tr>
+                -->
+                <tr>
+                    <td>Password:</td>
+                    <td><input v-model="password" type="password"></td>
+                </tr>
+            </table>
+            <button @click="submit">Login</button>
+        </div>
+    </body>
+    <script>
+        const mountedApp = app.mount("#app")
+    </script>
+</html>

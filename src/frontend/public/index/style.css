@@ -4,6 +4,7 @@
 body {
     background-color:azure;
     font-family: 'Atkinson Hyperlegible', sans-serif;
+    font-size: 3vh
 }
 
 .flex-container {
@@ -14,8 +15,4 @@ body {
 .top-right {
     flex: 50%;
     text-align:right;
-}
-
-.top-center {
-    
 }

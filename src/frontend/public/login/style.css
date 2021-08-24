@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap');
+
+body {
+    background-color:azure;
+    font-family: 'Atkinson Hyperlegible', sans-serif;
+    font-size: 3vh;
+    display:grid;
+    height:100%;
+    align-content: center;
+    justify-content: center;
+}
+
+button {
+    width: 100%
+}
