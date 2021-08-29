@@ -3,19 +3,24 @@
 body {
     background-color:azure;
     font-family: 'Atkinson Hyperlegible', sans-serif;
-    font-size: 3vh;
+    font-size: 3vw;
     display:grid;
     height:100%;
     align-content: center;
     justify-content: center;
-    margin: 0;
+    margin:0;
 }
 
 button {
-    width: 100%;
+    width: 100%
 }
 
-.bottom {
-    position: absolute;
-    bottom: 1vh;
+.errorInput {
+    background-color: salmon;
+}
+
+.errorText {
+    color:red;
+    font-size: 1vw;
+    text-align: center;
 }

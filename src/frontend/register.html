@@ -3,7 +3,7 @@
         <script src="https://unpkg.com/vue@next"></script> <!--TODO: switch to prod-->
         <script src="/socket.io/socket.io.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
-        <script src="login.js"></script>
+        <script src="register.js"></script>
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
@@ -11,16 +11,26 @@
             <table>
                 <tr>
                     <td>Username:</td>
-                    <td><input v-model="username"></td>
+                    <td><input v-model="username" :class = "{errorInput: usernameTaken}"></td>
                 </tr>
+                <tr v-if="usernameTaken">
+                    <td></td><td><div class="errorText">Username taken</td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td><input v-model="email" type="email" :class = "{errorInput: invalidEmail}"></td>
+                </tr>
+                <!--
+                <tr v-if="invalidEmail">
+                    <td></td><td><div class="errorText">Invalid Email</td>
+                </tr>
+                -->
                 <tr>
                     <td>Password:</td>
                     <td><input v-model="password" type="password"></td>
                 </tr>
             </table>
-            <button @click="submit">Login</button>
-            
-            <div class="bottom"><a href="/register">Don't have an account?</a></div>
+            <button @click="submit">Register</button>
         </div>
     </body>
     <script>
