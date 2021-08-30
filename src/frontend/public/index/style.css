@@ -4,7 +4,8 @@
 body {
     background-color:azure;
     font-family: 'Atkinson Hyperlegible', sans-serif;
-    font-size: 3vh
+    font-size: 3vh;
+    display: grid;
 }
 
 .flex-container {
@@ -25,4 +26,11 @@ a {
 .float-child {
     width:50%;
     float:left;
+}
+
+.controls {
+    display: inline-block;
+    display: -moz-inline-box;
+    width: 90%;
+    text-align: center;
 }
