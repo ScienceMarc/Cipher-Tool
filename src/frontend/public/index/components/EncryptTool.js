@@ -2,13 +2,13 @@ app.component('encrypt-tool', {
     data() {
         return {
             step: 0,
-            inputText: "",
+            inputText: "test",
             outputText: "",
             algos: ["Caesar", "Rail", "Morse"],
             algo: "Caesar",
             isAnimating: false,
 
-            caesar: { currentLetter: 0, shift: 0, numeric: false }
+            caesar: { currentLetter: 0, shift: 10, numeric: false }
         }
     },
     methods: {
@@ -43,7 +43,6 @@ app.component('encrypt-tool', {
 
                 p5.background("darkgray");
                 p5.text("Input text: " + that.inputText, p5.width / 2, p5.height * 0.1)
-
                 if (that.algo == "Caesar") {
                     p5.push();
                     p5.textSize(10);
@@ -54,29 +53,67 @@ app.component('encrypt-tool', {
                     p5.pop()
 
                     alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                    switch (that.step % 3) {
-                        case 0:
-                            for (let i = 0; i < alpha.length; i++) {
-                                p5.rect((i) * (p5.width / alpha.length), p5.height * 0.4 - 12, (p5.width / alpha.length), 15)
-                                p5.text(alpha[i], (i + 0.5) * (p5.width / alpha.length), p5.height * 0.4);
-                            }
-                            for (let i = 0; i < alpha.length * 2; i++) {
-                                p5.rect((i) * (p5.width / alpha.length), p5.height * 0.4 + 3, (p5.width / alpha.length), 15)
-                                p5.text(alpha[i % alpha.length], (i + 0.5) * (p5.width / alpha.length), p5.height * 0.4 + 15);
-                            }
-                            break;
-                        case 1:
-                            for (let i = 0; i < alpha.length; i++) {
-                                p5.rect((i) * (p5.width / alpha.length), p5.height * 0.4 - 12, (p5.width / alpha.length), 15)
-                                p5.text(alpha[i], (i + 0.5) * (p5.width / alpha.length), p5.height * 0.4);
-                            }
-                            for (let i = 0; i < alpha.length * 2; i++) {
-                                p5.rect((i - t) * (p5.width / alpha.length), p5.height * 0.4 + 3, (p5.width / alpha.length), 15)
-                                p5.text(alpha[i % alpha.length], (i - t + 0.5) * (p5.width / alpha.length), p5.height * 0.4 + 15);
-                            }
-                            if (t < that.caesar.shift) {
-                                t += 0.1;
-                            }
+                    
+                    if (that.step == 0) {
+                        t = 0;
+                        for (let i = 0; i < alpha.length; i++) {
+                            p5.rect((i) * (p5.width / alpha.length), p5.height * 0.4 - 12, (p5.width / alpha.length), 15)
+                            p5.text(alpha[i], (i + 0.5) * (p5.width / alpha.length), p5.height * 0.4);
+                        }
+                        for (let i = 0; i < alpha.length * 2; i++) {
+                            p5.rect((i) * (p5.width / alpha.length), p5.height * 0.4 + 3, (p5.width / alpha.length), 15)
+                            p5.text(alpha[i % alpha.length], (i + 0.5) * (p5.width / alpha.length), p5.height * 0.4 + 15);
+                        }
+                    }
+                    else if (that.step == 1) {
+                        for (let i = 0; i < alpha.length; i++) {
+                            p5.rect((i) * (p5.width / alpha.length), p5.height * 0.4 - 12, (p5.width / alpha.length), 15)
+                            p5.text(alpha[i], (i + 0.5) * (p5.width / alpha.length), p5.height * 0.4);
+                        }
+                        for (let i = 0; i < alpha.length * 2; i++) {
+                            p5.rect((i - t) * (p5.width / alpha.length), p5.height * 0.4 + 3, (p5.width / alpha.length), 15)
+                            p5.text(alpha[i % alpha.length], (i - t + 0.5) * (p5.width / alpha.length), p5.height * 0.4 + 15);
+                        }
+                        if (t < that.caesar.shift) {
+                            t += 0.25;
+                        }
+                        else {
+                            t = Math.round(t);
+                        }
+                    }
+                    else {
+                        p5.push();
+                        p5.textSize(20)
+                        for (let i = 0; i < that.inputText.length; i++) {
+                            p5.push()
+                            if (that.caesar.currentLetter == i) {p5.fill('red')}
+                            p5.rect((i - that.inputText.length / 2 - 0.5) * 18 + p5.width / 2, p5.height * 0.3 - 16, 18, 20);
+                            p5.pop()
+                            p5.text(that.inputText[i], (i - that.inputText.length / 2) * 18 + p5.width / 2, p5.height * 0.3);
+                        }
+                        p5.pop();
+                        for (let i = 0; i < alpha.length; i++) {
+                            p5.push();
+                            if (that.inputText[that.caesar.currentLetter].toUpperCase() == alpha[i] && (that.step - 2) % 4 >= 1) {p5.fill('red')}
+                            
+                            p5.rect((i) * (p5.width / alpha.length), p5.height * 0.4 - 12, (p5.width / alpha.length), 15)
+                            p5.pop();
+
+                            p5.text(alpha[i], (i + 0.5) * (p5.width / alpha.length), p5.height * 0.4);
+                        }
+                        for (let i = 0; i < alpha.length * 2; i++) {
+                            p5.push();
+                            if (that.inputText[that.caesar.currentLetter].toUpperCase() == alpha[i - that.caesar.shift] && (that.step - 2) % 4 >= 2) {p5.fill('red')}
+                            
+                            p5.rect((i - that.caesar.shift) * (p5.width / alpha.length), p5.height * 0.4 + 3, (p5.width / alpha.length), 15)
+                            p5.pop()
+                            
+                            p5.text(alpha[i % alpha.length], (i - that.caesar.shift + 0.5) * (p5.width / alpha.length), p5.height * 0.4 + 15);
+                        }
+
+                        if ((that.step - 2) % 4 >= 3) {
+                            //that.outputText +=
+                        }
                     }
                     p5.pop();
                 }
