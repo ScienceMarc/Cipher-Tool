@@ -4,9 +4,11 @@ app.component('encrypt-tool', {
             step: 0,
             inputText: "test",
             outputText: "",
-            algos: ["Caesar", "Rail", "Morse"],
+            algos: ["Caesar", "Rail", "Vigenère"],
             algo: "Caesar",
             isAnimating: false,
+            skip: false,
+            isComplete: false,
 
             caesar: { currentLetter: 0, shift: 10, numeric: false }
         }
@@ -39,6 +41,10 @@ app.component('encrypt-tool', {
                     else {
                         animationTriggered = false;
                     }
+                }
+
+                if (that.skip && !that.isComplete) {
+                    that.step++;
                 }
 
                 p5.background("darkgray");
@@ -81,7 +87,7 @@ app.component('encrypt-tool', {
                             t = Math.round(t);
                         }
                     }
-                    else {
+                    else if (that.caesar.currentLetter != that.inputText.length) {
                         p5.push();
                         p5.textSize(20)
                         for (let i = 0; i < that.inputText.length; i++) {
@@ -94,26 +100,40 @@ app.component('encrypt-tool', {
                         p5.pop();
                         for (let i = 0; i < alpha.length; i++) {
                             p5.push();
-                            if (that.inputText[that.caesar.currentLetter].toUpperCase() == alpha[i] && (that.step - 2) % 4 >= 1) {p5.fill('red')}
+                            if (that.inputText[that.caesar.currentLetter].toUpperCase() == alpha[i] && (that.step - 2) % 5 >= 1) {p5.fill('red')}
                             
                             p5.rect((i) * (p5.width / alpha.length), p5.height * 0.4 - 12, (p5.width / alpha.length), 15)
                             p5.pop();
 
                             p5.text(alpha[i], (i + 0.5) * (p5.width / alpha.length), p5.height * 0.4);
                         }
+                        let selectedLetter = ""
                         for (let i = 0; i < alpha.length * 2; i++) {
                             p5.push();
-                            if (that.inputText[that.caesar.currentLetter].toUpperCase() == alpha[i - that.caesar.shift] && (that.step - 2) % 4 >= 2) {p5.fill('red')}
-                            
+                            if (that.inputText[that.caesar.currentLetter].toUpperCase() == alpha[i - that.caesar.shift] && (that.step - 2) % 5 >= 2) {
+                                p5.fill('red');
+                                selectedLetter = alpha[i % alpha.length];
+                            }
                             p5.rect((i - that.caesar.shift) * (p5.width / alpha.length), p5.height * 0.4 + 3, (p5.width / alpha.length), 15)
                             p5.pop()
                             
                             p5.text(alpha[i % alpha.length], (i - that.caesar.shift + 0.5) * (p5.width / alpha.length), p5.height * 0.4 + 15);
                         }
 
-                        if ((that.step - 2) % 4 >= 3) {
-                            //that.outputText +=
+                        if ((that.step - 2) % 5 == 3 && that.outputText.length < (that.step - 4)/4) {
+                            that.outputText += selectedLetter;
                         }
+                        else if((that.step - 2) % 5 == 4) {
+                            that.caesar.currentLetter++;
+                            that.step++;
+                        }
+                    }
+                    else {
+                        that.isComplete = true;
+                        p5.push();
+                        p5.textSize(20);
+                        p5.text("Finished", p5.width/2, p5.height/2);
+                        p5.pop();
                     }
                     p5.pop();
                 }
@@ -134,11 +154,11 @@ app.component('encrypt-tool', {
             <main></main>
             <!--controls-->
             <div class="controls">
-                <button><i class="material-icons">fast_rewind</i></button>
-                <button><i class="material-icons">arrow_left</i></button>
+                <button><i class="material-icons">fast_rewind</i></button> <!--TODO: figure out how to undo cipher.-->
+                <button><i class="material-icons">arrow_left</i></button> <!--TODO: figure out how to undo cipher.-->
                 <button @click="isAnimating = !isAnimating"><i class="material-icons">{{isAnimating ? 'pause' : 'play_arrow'}}</i></button>
-                <button><i class="material-icons" @click="step++">arrow_right</i></button>
-                <button><i class="material-icons">fast_forward</i></button>
+                <button><i class="material-icons" @click="step+= !isComplete">arrow_right</i></button> <!--Kind of a hack-->
+                <button><i class="material-icons" @click="skip = true">fast_forward</i></button>
             </div>
         </div>
         <div class="float-child">
@@ -153,6 +173,7 @@ app.component('encrypt-tool', {
                     Shift numbers? <input v-model="caesar.numeric" type="checkbox"><br>
                 </div>
             </div>
+            Output: {{outputText}}
         </div>
     </div>
     `
