@@ -11,8 +11,7 @@ app.component('encrypt-tool', {
             isComplete: false,
 
             caesar: { currentLetter: 0, shift: 25, alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ" },
-            rail: { railCount: 3, currentLetter: 0 },
-            test: "space   space   space"
+            rail: { railCount: 3, currentLetter: 0 }
         }
     },
     methods: {
