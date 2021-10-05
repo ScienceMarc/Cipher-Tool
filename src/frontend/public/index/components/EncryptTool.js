@@ -2,7 +2,7 @@ app.component('encrypt-tool', {
     data() {
         return {
             step: 0,
-            inputText: "test",
+            inputText: "Sphinx of black quartz, judge my vows",
             outputText: "",
             algos: ["Caesar", "Rail", "Vigenère"],
             algo: "Caesar",
@@ -10,7 +10,9 @@ app.component('encrypt-tool', {
             skip: false,
             isComplete: false,
 
-            caesar: { currentLetter: 0, shift: 10, numeric: false }
+            caesar: { currentLetter: 0, shift: 25, alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ" },
+            rail: { railCount: 3, currentLetter: 0 },
+            test: "space   space   space"
         }
     },
     methods: {
@@ -32,9 +34,9 @@ app.component('encrypt-tool', {
             }
             p5.draw = () => {
                 if (that.isAnimating) {
-                    if (p5.second() % 3 == 0) {
+                    if (Math.floor(p5.millis() / 100) % 5 == 0) {
                         if (!animationTriggered) {
-                            that.step++; 
+                            that.step++;
                             animationTriggered = true;
                         }
                     }
@@ -50,7 +52,10 @@ app.component('encrypt-tool', {
                 p5.background("darkgray");
                 p5.text("Input text: " + that.inputText, p5.width / 2, p5.height * 0.1)
                 if (that.algo == "Caesar") {
-                    caesar(that,p5);
+                    caesar(that, p5);
+                }
+                else if (that.algo == "Rail") {
+                    rail(that, p5);
                 }
 
                 p5.text("Output text: " + that.outputText, p5.width / 2, p5.height * 0.95)
@@ -77,18 +82,21 @@ app.component('encrypt-tool', {
             </div>
         </div>
         <div class="float-child">
-            Input text: <input v-model="inputText" placeholder="Input any text">
             Cipher: 
             <select v-model="algo">
                 <option v-for="a in algos">{{a}}</option>
-            </select>
+            </select><br>
+            Input text: <input v-model="inputText" placeholder="Input any text" :style="{ width:inputText.length + 1 + 'ch'}" class="textInput">
             <div v-show="algo">{{algo}} cipher options:<br>
                 <div v-if="algo == 'Caesar'">
                     Shift amount: <input v-model="caesar.shift" type="number" min="0" :max="caesar.alphanumeric ? 36-1 : 26-1"><br>
-                    Shift numbers? <input v-model="caesar.numeric" type="checkbox"><br>
+                    Alphabet: <input v-model="caesar.alphabet" :style="{ width:caesar.alphabet.length + 1 + 'ch'}" class="textInput">
                 </div>
+                <div v-if="algo == 'Rail'">
+                    Rail count: <input v-model="rail.railCount" type="number" min="2" max="10"><br>
+                </div>
+            Output: <pre>{{outputText}}</pre>
             </div>
-            Output: {{outputText}}
         </div>
     </div>
     `
