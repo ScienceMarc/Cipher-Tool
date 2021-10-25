@@ -1,4 +1,5 @@
 function rail(that, p5) {
+    p5.text("Input text: " + that.inputText, p5.width / 2, p5.height * 0.1)
     p5.push();
     p5.textSize(10);
 
@@ -60,8 +61,6 @@ function rail(that, p5) {
         for (let i = 0; i < that.inputText.length; i++) {
             rows[row(i)] += that.inputText[i];
         }
-        console.log(rows)
-        console.log(that.outputText)
         let totalLength = 0;
         for (let i = 0; i < that.rail.railCount; i++) {
             if ((that.step - 3) % that.rail.railCount >= i) {

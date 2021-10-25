@@ -8,6 +8,7 @@
         <script src="index/components/EncryptTool.js"></script>
         <script src="index/ciphers/caesar.js"></script>
         <script src="index/ciphers/rail.js"></script>
+        <script src="index/ciphers/vigenere.js"></script>
 
 
         <link rel="stylesheet" href="index/style.css">
@@ -16,6 +17,7 @@
     <body>
         <div id="app">
             <div class="flex-container">
+                <div @click="selectedTab++">next</div>
                 <div class="top-right">
                     <a href="login">
                         {{username}}
@@ -24,6 +26,7 @@
                 </div>
             </div>
             <encrypt-tool v-if="selectedTab == 0"></encrypt-tool>
+            <encrypt-tool v-else></encrypt-tool>
         </div>
     </body>
     <script>
