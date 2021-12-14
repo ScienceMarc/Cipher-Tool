@@ -23,9 +23,9 @@ MongoClient.connect(uri, function(err, db) {
     dbo = db.db("CipherDB");
 });
 
-const port = 3000;
+const port = 80;
 
-app.use(express.static("src/frontend/public"));
+app.use(express.static("/app/src/frontend/public"));
 
 io.on("connection", (socket) => {
     console.log("connection");
