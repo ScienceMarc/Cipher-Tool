@@ -6,6 +6,7 @@
 
         <script src="index/index.js"></script>
         <script src="index/components/EncryptTool.js"></script>
+        <script src="index/components/CipherShare.js"></script>
         <script src="index/ciphers/caesar.js"></script>
         <script src="index/ciphers/rail.js"></script>
         <script src="index/ciphers/vigenere.js"></script>
@@ -17,7 +18,7 @@
     <body>
         <div id="app">
             <div class="flex-container">
-                <div @click="selectedTab++">next</div>
+                <div @click="viewingCipherShare = !viewingCipherShare">next</div>
                 <div class="top-right">
                     <a href="login">
                         {{username}}
@@ -25,8 +26,8 @@
                     </a>
                 </div>
             </div>
-            <encrypt-tool v-if="selectedTab == 0"></encrypt-tool>
-            <encrypt-tool v-else></encrypt-tool>
+            <encrypt-tool v-show="!viewingCipherShare"></encrypt-tool>
+            <cipher-share v-show="viewingCipherShare"></cipher-share>
         </div>
     </body>
     <script>
