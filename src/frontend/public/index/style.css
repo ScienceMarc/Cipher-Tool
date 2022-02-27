@@ -46,3 +46,19 @@ pre {
     border: none;
     padding: 0;
 }
+
+.full-button {
+    width: 100%;
+    background-color:lightblue;
+    border-radius: 1ch;
+    border: 1px solid lightseagreen;
+}
+
+.post {
+    background-color: lightblue;
+    width: 99%;
+    border-radius: 0.5ch;
+    margin: 0.5%;
+    border: 1px solid lightseagreen;
+    position: relative;
+}
