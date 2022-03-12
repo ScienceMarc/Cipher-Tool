@@ -1,10 +1,14 @@
-/*@import url(https://fonts.googleapis.com/css?family=Open+Sans);*/
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
 body {
     background-color:azure;
-    font-family: 'Atkinson Hyperlegible', sans-serif;
+    /*
+    Using this font because it was rated best for those with vision impairments
+    My users may have poor vision so using this font hopefully makes it easier for them.
+    Nothing can be done for the animations though...
+    */
+    font-family: 'Atkinson Hyperlegible', sans-serif; 
     font-size: 3vh;
     display: grid;
 }

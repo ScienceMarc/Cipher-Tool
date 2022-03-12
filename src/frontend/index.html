@@ -1,8 +1,8 @@
 <html>
     <head>
-        <script src="https://unpkg.com/vue@next"></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
+        <script src="https://unpkg.com/vue@next"></script> <!--TODO: Switch to prod-->
+        <script src="/socket.io/socket.io.js"></script> <!--socket io for communicating with the backend-->
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script> <!--p5.js for canvas manipulation-->
 
         <script src="index/index.js"></script>
         <script src="index/components/EncryptTool.js"></script>
@@ -13,12 +13,12 @@
 
 
         <link rel="stylesheet" href="index/style.css">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!--Google has nice free-to-use icons-->
     </head>
     <body>
         <div id="app">
             <div class="flex-container">
-                <div @click="viewingCipherShare = !viewingCipherShare">next</div>
+                <div @click="viewingCipherShare = !viewingCipherShare">{{viewingCipherShare ? 'Encrypt' : 'Share'}}</div>
                 <div class="top-right">
                     <a href="login">
                         {{username}}

@@ -17,19 +17,21 @@ app.component('encrypt-tool', {
     },
     methods: {
         resetCipher() {
+            //General variables
             this.step = 0;
             this.isAnimating = false;
             this.outputText = "";
             this.isComplete = false
             this.skip = false
 
+            //Cipher specific settings.
             this.caesar = { currentLetter: 0, shift: 25, alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ" }
             this.rail = { railCount: 3 }
             this.vigenere = { alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", key: "lemon"}
         }
     },
     mounted() {
-        let that = this; //This line of code broke me. It's necessary because what 'this' refers to changes on the next line. This is the recommended way of solving this apparent bug in the ECMA spec.
+        let that = this; //This confusing variable is the recommended way to fix a bug in the ES6 JavaScript standard to do with changes in scope
         const script = function (p5) { //Using p5.js for canvas control.
             t = 0;
             let animationTriggered = false;
@@ -40,7 +42,7 @@ app.component('encrypt-tool', {
             }
             p5.draw = () => {
                 if (that.isAnimating) {
-                    if (Math.floor(p5.millis() / 100) % 5 == 0) {
+                    if (Math.floor(p5.millis() / 100) % 5 == 0) { //Auto stepping with play button 
                         if (!animationTriggered) {
                             that.step++;
                             animationTriggered = true;
@@ -51,11 +53,11 @@ app.component('encrypt-tool', {
                     }
                 }
 
-                if (that.skip && !that.isComplete) {
+                if (that.skip && !that.isComplete) { //The fast forward butten moves one step per frame
                     that.step++;
                 }
 
-                p5.background("darkgray");
+                p5.background("azure");
                 
                 if (that.algo == "Caesar") {
                     caesar(that, p5);
@@ -81,7 +83,7 @@ app.component('encrypt-tool', {
     <div>
         <div class="float-child">
             <main></main>
-            <!--controls-->
+            <!--playback controls-->
             <div class="controls">
                 <button @click="resetCipher()"><i class="material-icons">fast_rewind</i></button>
                 <button @click="isAnimating = !isAnimating"><i class="material-icons">{{isAnimating ? 'pause' : 'play_arrow'}}</i></button>

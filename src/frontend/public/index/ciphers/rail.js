@@ -22,8 +22,9 @@ function rail(that, p5) {
             p5.text(that.inputText[i], (i + 0.5) * (p5.width / that.inputText.length), 0);
         }
     }
+    //Spread letters out
     else if (that.step == 1) {
-        if (t < 1) {
+        if (t < 1) { //Same timing principle to the caesar cipher
             t += 0.02;
         }
         for (let i = 0; i < that.inputText.length; i++) {
@@ -41,9 +42,10 @@ function rail(that, p5) {
         rows[0] -=1; //The first row is special because its first character is already in position
         for (let i = 0; i < that.inputText.length; i++) {
             let squish = 0;
+            //This lambda expression probably ought to be its own function as I use it twice.
             let row = x => Math.round(railDistribution(x, that.rail.railCount) * (that.rail.railCount - 1));
-            for (let j = i - 1; j > 0; j--) {
-                if (row(i) == row(j)) {
+            for (let j = i - 1; j > 0; j--) { //Counting how many character widths I need to move things by.
+                if (row(i) == row(j)) { 
                     break;
                 }
                 squish++;
@@ -54,7 +56,7 @@ function rail(that, p5) {
         }
     }
     else if (that.step >= 3 && (that.step - 3) < that.rail.railCount) {
-        //convert everything to a 2d array rather than a fancy translation of the string.
+        //convert everything to a 2d array rather than a fancy translation of the string that it has been until now.
         let rows = Array(that.rail.railCount).fill("");
         
         let row = x => Math.round(railDistribution(x, that.rail.railCount) * (that.rail.railCount - 1));

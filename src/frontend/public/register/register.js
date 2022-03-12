@@ -18,7 +18,7 @@ const app = Vue.createApp({
         }
     },
     computed: {
-        invalidEmail() {
+        invalidEmail() { //Email regex from https://emailregex.com/
             if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.email)) {
                 return true;
             }

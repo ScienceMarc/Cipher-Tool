@@ -12,7 +12,7 @@ const app = Vue.createApp({
             this.username = decoded.username;
         });
 
-        let login = window.localStorage.getItem("login");
+        let login = window.localStorage.getItem("login"); //Get token from browser localstorage
         if (login) {
             let token = JSON.parse(login);
 

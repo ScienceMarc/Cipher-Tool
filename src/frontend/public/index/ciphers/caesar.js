@@ -19,17 +19,11 @@ function caesar(that, p5) {
         }
     }
 
-    //console.log(that.inputText[that.caesar.currentLetter].toUpperCase());
-    
-    /*
-    if (that.inputText[that.caesar.currentLetter] == " "){ //double spaces will not work right
-        that.outputText += " "
-        that.caesar.currentLetter++;
-    }*/
-
     if (that.step == 0) {
         t = 0;
         for (let i = 0; i < alpha.length; i++) {
+            //These p5.rect and p5.text functions are being used to draw the text boxes for the ciphers
+            //Due to the unknown size of the cipher window, relative positions must be used with a lot fine tuned values.
             p5.rect((i) * (p5.width / alpha.length), p5.height * 0.4 - 12, (p5.width / alpha.length), 15)
             p5.text(alpha[i], (i + 0.5) * (p5.width / alpha.length), p5.height * 0.4);
         }
@@ -47,10 +41,10 @@ function caesar(that, p5) {
             p5.rect((i - t) * (p5.width / alpha.length), p5.height * 0.4 + 3, (p5.width / alpha.length), 15)
             p5.text(alpha[i % alpha.length], (i - t + 0.5) * (p5.width / alpha.length), p5.height * 0.4 + 15);
         }
-        if (t < that.caesar.shift) {
+        if (t < that.caesar.shift) { //The t variable controls the animation movement
             t += 0.25;
         }
-        else {
+        else { //Hide floating point errors
             t = Math.round(t);
         }
     }
@@ -59,15 +53,17 @@ function caesar(that, p5) {
         p5.textSize(20)
         for (let i = 0; i < that.inputText.length; i++) {
             p5.push()
-            if (that.caesar.currentLetter == i) { p5.fill('red') }
+            if (that.caesar.currentLetter == i) { p5.fill('red') } //Highlight current letter red
             p5.rect((i - that.inputText.length / 2 - 0.5) * 18 + p5.width / 2, p5.height * 0.3 - 16, 18, 20);
             p5.pop()
             p5.text(that.inputText[i], (i - that.inputText.length / 2) * 18 + p5.width / 2, p5.height * 0.3);
         }
         p5.pop();
+        //These loops are essentially linear searches through the alphabet and inputText strings
         for (let i = 0; i < alpha.length; i++) {
             p5.push();
-            if (that.inputText[that.caesar.currentLetter].toUpperCase() == alpha[i] && (that.step - 2) % 4 >= 1) { 
+            //This complicated condition was the best I could come up with due to the unknowable nature of the number of steps.
+            if (that.inputText[that.caesar.currentLetter].toUpperCase() == alpha[i] && (that.step - 2) % 4 >= 1) {
                 p5.fill('red');
             }
 
@@ -92,10 +88,6 @@ function caesar(that, p5) {
             that.outputText += selectedLetter;
             that.caesar.currentLetter++;
             that.step++;
-            
-        }
-        else if ((that.step - 2) % 4 == 4) {
-            
             
         }
     }
