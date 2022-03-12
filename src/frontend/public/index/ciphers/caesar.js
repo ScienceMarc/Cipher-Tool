@@ -1,4 +1,3 @@
-//TODO: Add support for numbers
 //TODO: Lock inputs so that the algorithm doesn't do strange things.
 function caesar(that, p5) {
     p5.text("Input text: " + that.inputText, p5.width / 2, p5.height * 0.1)

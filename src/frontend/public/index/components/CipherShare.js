@@ -3,7 +3,7 @@ app.component('cipher-share', {
         return {
             loggedIn: false,
             username: "test",
-            posts: [
+            posts: [ //Examples of each cipher. If the user sees these that means either the database or socket aren't working properly.
                 {author:"Alice", time:0, ciphertext:"BCD", answer:"ABC", userAnswer:"", cipher: {name:"Caesar", shift:1, alphabet:"ABCDEFGHIJKLMNOPQRSTUVWXYZ"}},
                 {author:"Bob", time:0, ciphertext:"ACB", answer:"ABC", userAnswer:"", cipher: {name:"Rail", rails: 2}},
                 {author:"Carol", time:0, ciphertext:"LFO", answer:"ABC", userAnswer:"", cipher: {name:"Vigenère", key: "LEMON"}},
@@ -14,32 +14,40 @@ app.component('cipher-share', {
         }
     },
     mounted() {
-        socket.on("valid token", (decoded) => {
-            this.username = decoded.username;
-            this.loggedIn = true;
-        });
         let login = window.localStorage.getItem("login");
         if (login) {
             let token = JSON.parse(login);
 
             socket.emit("verify token", token);
-
         }
+        socket.on("valid token", (decoded) => {
+            this.username = decoded.username;
+            this.loggedIn = true;
+        });
         socket.on("posts", posts => {
             this.posts = []
             for (let p of posts) {
                 p.userAnswer = ""
                 this.posts.push(p)
             }
-            console.log(this.posts)
-            this.posts.sort((a,b) => (a.time < b.time) ? 1 : -1)
+            this.posts.sort((a,b) => (a.time < b.time) ? 1 : -1) //Sort posts in ascending age order
         })
         socket.emit("load posts")
-        socket.on("load new post", (post => {
+        socket.on("load new post", post => {
             post.userAnswer = ""
             this.posts.push(post)
-            this.posts.sort((a,b) => (a.time < b.time) ? 1 : -1)
-        }))
+            this.posts.sort((a,b) => (a.time < b.time) ? 1 : -1) //Sort posts in ascending age order
+        })
+        socket.on("solved cipher", id => {
+            for (let i = 0; i < this.posts.length; i++) {
+                if (this.posts[i]._id == id) {
+                    this.posts[i].cipher.name = "solved"
+                    setTimeout(()=>{ //Removes the post after 5 seconds
+                        this.posts.splice(i, 1);
+                    }, 5000)
+                }
+            }
+        })
     },
     methods: {
         getTimeSince(t) {
@@ -71,15 +79,16 @@ app.component('cipher-share', {
         },
         submitAnswer(answer) {
             if (answer.userAnswer == answer.answer) {
-                answer.cipher = "Correct!" //Simplest way to congradulate the user that I could think of
-                console.log()
                 socket.emit("solved cipher", answer._id)
+                answer.cipher.name = "solved" //Simplest way to congradulate the user that I could think of
             }
         },
         submitNewPost(np) {
             np.author = this.username
             np.time = new Date().getTime()
             socket.emit("submit new challenge",np)
+            this.posts.push(np)
+            //clear and erase post creation window upon submission
             this.newPost = {ciphertext:"", answer:"",cipher:{name:""}}
             this.showCreatePostMenu = false
         },
@@ -130,8 +139,8 @@ app.component('cipher-share', {
                     <div>Ciphertext: {{post.ciphertext}}</div>
                     <div>Key: {{post.cipher.key}}</div>
                 </div>
-                <div v-if="post.cipher.name == 'Correct!'">
-                    <h1>Nice Job!</h1>
+                <div v-if="post.cipher.name == 'solved'">
+                    <h1>Solved</h1>
                 </div>
                 <div>Answer <input type="text" v-model="post.userAnswer"> <button @click="submitAnswer(post)">Submit</button></div>
                 <div style="text-align: right;font-size: 0.8ch;position: absolute;bottom: 0;right: 0;">posted by {{post.author}} {{getTimeSince(post.time)}} ago</div>

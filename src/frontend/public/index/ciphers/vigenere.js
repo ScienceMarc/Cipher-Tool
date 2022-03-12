@@ -1,3 +1,4 @@
+//TODO: Lock inputs
 function vigenere(that, p5) {
     p5.push();
     p5.textSize(10);

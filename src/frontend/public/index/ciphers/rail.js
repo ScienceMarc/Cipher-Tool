@@ -1,3 +1,4 @@
+//TODO: Lock inputs
 function rail(that, p5) {
     p5.text("Input text: " + that.inputText, p5.width / 2, p5.height * 0.1)
     p5.push();

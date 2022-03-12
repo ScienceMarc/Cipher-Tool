@@ -16,7 +16,7 @@ const { MongoClient, ObjectId } = require("mongodb");
 const uri = "mongodb+srv://MarcLavergne:VyqKQWJUJs7Bdlh6@cluster0.muktw.mongodb.net/CipherDB?retryWrites=true&w=majority"
 const mongo = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-let dbo;
+let dbo; //dbo stands for 'database object'
 
 MongoClient.connect(uri, function(err, db) { //Establish connection with DB
     if (err) throw err;
@@ -77,7 +77,7 @@ io.on("connection", (socket) => {
                 console.log(err)
             }
             else {
-                socket.emit("load new post", challenge)
+                socket.broadcast.emit("load new post", challenge)
             }
         })
     })
@@ -91,7 +91,10 @@ io.on("connection", (socket) => {
     socket.on("solved cipher", (id) => {
         dbo.collection("posts").deleteOne({"_id":ObjectId(id)}, (err, result) => {
             if (err) console.log(err)
-            console.log(result)
+            else {
+                socket.broadcast.emit("solved cipher", id)
+            }
+
           });
     })
 })

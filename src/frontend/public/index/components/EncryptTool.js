@@ -5,14 +5,14 @@ app.component('encrypt-tool', {
             inputText: "Sphinx of black quartz, judge my vow",
             outputText: "",
             algos: ["Caesar", "Rail", "Vigenère"],
-            algo: "Vigenère",
+            algo: "Caesar",
             isAnimating: false,
             skip: false,
             isComplete: false,
 
             caesar: { currentLetter: 0, shift: 25, alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ" },
             rail: { railCount: 3 },
-            vigenere: { alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", key: "lemon"}
+            vigenere: { alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", key: "lemon" }
         }
     },
     methods: {
@@ -27,51 +27,54 @@ app.component('encrypt-tool', {
             //Cipher specific settings.
             this.caesar = { currentLetter: 0, shift: 25, alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ" }
             this.rail = { railCount: 3 }
-            this.vigenere = { alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", key: "lemon"}
+            this.vigenere = { alphabet: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", key: "lemon" }
         }
     },
     mounted() {
-        let that = this; //This confusing variable is the recommended way to fix a bug in the ES6 JavaScript standard to do with changes in scope
+        let that = this; //This confusingly named variable is the recommended way to fix a bug in the ES6 JavaScript standard to do with changes in scope
         const script = function (p5) { //Using p5.js for canvas control.
-            t = 0;
-            let animationTriggered = false;
+            t = 0; //Time variable, used for gradual animations
+            let animationTriggered = false; //This variable almost acts like the escapement of a clock, it locks the animation momentarily only to unlock it again in a cycle
             p5.setup = () => {
-                p5.createCanvas(p5.windowWidth / 2 - 20, (p5.windowWidth / 2 - 20) * 0.7);
+                p5.createCanvas(p5.windowWidth / 2 - 20, (p5.windowWidth / 2 - 20) * 0.7); //Creates an HTML5 canvas
                 p5.textAlign(p5.CENTER);
                 p5.textSize(16);
             }
             p5.draw = () => {
-                if (that.isAnimating) {
-                    if (Math.floor(p5.millis() / 100) % 5 == 0) { //Auto stepping with play button 
+                if (that.isAnimating) { //Auto stepping with play button
+                    if (Math.floor(p5.millis() / 100) % 5 == 0) { //Every 0.5 seconds
                         if (!animationTriggered) {
                             that.step++;
-                            animationTriggered = true;
+                            animationTriggered = true; //Lock the animation until the next unlock
                         }
                     }
                     else {
-                        animationTriggered = false;
+                        animationTriggered = false; //Unlock
                     }
                 }
 
-                if (that.skip && !that.isComplete) { //The fast forward butten moves one step per frame
+                if (that.skip && !that.isComplete) { //The fast forward button moves one step per frame
                     that.step++;
                 }
 
-                p5.background("azure");
-                
-                if (that.algo == "Caesar") {
-                    caesar(that, p5);
-                }
-                else if (that.algo == "Rail") {
-                    rail(that, p5);
-                }
-                else if (that.algo == "Vigenère") {
-                    vigenere(that, p5);
+                p5.background("azure"); //Azure was chosen as it roughly corresponds to the school colors for my client
+
+                //This switch determines which algorithm is rendered in the canvas
+                switch (that.algo) {
+                    case "Caesar":
+                        caesar(that, p5);
+                        break
+                    case "Rail":
+                        rail(that, p5);
+                        break
+                    case "Vigenère":
+                        vigenere(that, p5);
+                        break
                 }
 
                 p5.text("Output text: " + that.outputText, p5.width / 2, p5.height * 0.95)
             }
-            p5.windowResized = () => {
+            p5.windowResized = () => { //React to browser resize events. Doesn't always work due to the inconsistent nature of the browser engine.
                 p5.createCanvas(p5.windowWidth / 2 - 20, (p5.windowWidth / 2 - 20) * 0.7);
             }
         }
