@@ -12,6 +12,8 @@ COPY . .
 
 WORKDIR /app/src/server
 
-EXPOSE 80
+ENV PORT=8080
+
+EXPOSE $PORT
 
 CMD ["node", "server.js"]
